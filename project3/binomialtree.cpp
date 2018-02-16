@@ -121,19 +121,19 @@ namespace QuantLib {
         Real alpha2 = alpha*alpha;
         Real alpha3 = alpha*alpha2;
         Real alpha5 = alpha3*alpha2;
-        Real alpha7 = alpha5*alpha2;
+        //Real alpha7 = alpha5*alpha2;
         Real beta = -0.375*alpha-alpha3;
         Real gamma = (5.0/6.0)*alpha5 + (13.0/12.0)*alpha3
             +(25.0/128.0)*alpha;
-        Real delta = -0.1025 *alpha- 0.9285 *alpha3
-            -1.43 *alpha5 -0.5 *alpha7;
+        //Real delta = -0.1025 *alpha- 0.9285 *alpha3
+        //    -1.43 *alpha5 -0.5 *alpha7;
         Real p =0.5;
         Real rootk = std::sqrt(k);
         p+= alpha/rootk;
         p+= beta /(k*rootk);
         p+= gamma/(k*k*rootk);
         // delete next line to get results for j three tree
-        p+= delta/(k*k*k*rootk);
+        //p+= delta/(k*k*k*rootk);
         return p;
     }
 
