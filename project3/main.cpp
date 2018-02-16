@@ -1,3 +1,4 @@
+
 #include "binomialtree.hpp"
 #include "binomialengine.hpp"
 #include <ql/methods/lattices/binomialtree.hpp>
@@ -5,15 +6,14 @@
 #include <ql/instruments/vanillaoption.hpp>
 #include <ql/stochasticprocess.hpp>
 
+#include <ql/pricingengines/vanilla/binomialengine.hpp>
+#include <ql/methods/lattices/binomialtree.hpp>
 
-#include <boost/timer.hpp>
 #include <ql/time/calendars/target.hpp>
 #include <stdlib.h>
 #include <iostream>
-#include <iomanip>
 
 
-//#include <ctime>
 
 using namespace QuantLib;
 
@@ -25,24 +25,25 @@ int main() {
         Calendar calendar = TARGET();
         Date todaysDate(6, January, 2017);
         Date settlementDate(8, January, 2017);
-        Date maturity(5, February, 2018);
-        //Settings::instance().evaluationDate() = todaysDate;
         Settings::instance().evaluationDate() = todaysDate;
         DayCounter dayCounter = Actual365Fixed();
+        
         
         // First example/First Option
         
         
         //Our option's parameters
         Option::Type type(Option::Call);
-        Real strike = 50;
-        Real underlying = 47;
-        
+        Real strike = 110;
+        Real underlying = 100;
+        Date maturity(5, February, 2018);
+
         Spread dividendYield = 0.00;
-        Rate riskFreeRate = 0.02;
-        Volatility volatility = 0.15;
+        Rate riskFreeRate = 0.03;
+        Volatility volatility = 0.20;
         std::string method;
-        Size timeSteps=1000;
+        Size timeStepsAfter=1000;
+        Size timeStepsBefore=1000;
 
         
         std::cout << "Option type = "                   << type << std::endl;
@@ -85,87 +86,119 @@ int main() {
         Real DeltaBS=europeanOption.delta();
         Real GammaBS=europeanOption.gamma();
         std::cout << method << std::endl;
-        std::cout << europeanOption.NPV() << std::endl;
-
-        std::cout << "Delta with BS: " << DeltaBS << std::endl;
-        std::cout << "Gamma with BS: " << GammaBS << std::endl;
+        std::cout << "NPV:                         "  << europeanOption.NPV() << std::endl;
+        std::cout << "Delta with BS:               "  << DeltaBS << std::endl;
+        std::cout << "Gamma with BS:               "  << GammaBS << std::endl;
         std::cout << std::endl;
         
         
         //JarrowRudd
+        //After
         method= "JarrowRudd";
-        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<JarrowRudd>(bsmProcess, timeSteps)));
+        
+        const clock_t start_time_After = clock();
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<JarrowRudd_2>(bsmProcess, timeStepsAfter)));
         Real DeltaJR=europeanOption.delta();
         Real GammaJR=europeanOption.gamma();
+        Real NPVJRAfter=europeanOption.NPV();
+        std::cout << "Time spent Before calculating:          " <<  float( clock () - start_time_After)  << std::endl;
+
         std::cout << method << std::endl;
-        //NPV before our modifications: 2.10776
-        std::cout << europeanOption.NPV() << std::endl;
-        std::cout << "Delta with JR BT:            " << DeltaJR << std::endl;
-        std::cout << "Gamma with JR BT:            " << GammaJR << std::endl;
-        std::cout << "Difference in delta with BS: " << DeltaJR-DeltaBS << std::endl;
-        std::cout << "Difference in gamma with BS: " << GammaJR-GammaBS << std::endl;
+        std::cout << "NPV:                                    "  << NPVJRAfter << std::endl;
+        std::cout << "Delta with JR BT:                       "  << DeltaJR << std::endl;
+        std::cout << "Gamma with JR BT:                       "  << GammaJR << std::endl;
+        std::cout << "Difference in delta with BS:            "  << DeltaJR-DeltaBS << std::endl;
+        std::cout << "Difference in gamma with BS:            "  << GammaJR-GammaBS << std::endl;
         std::cout << std::endl;
+        //Comparing the Before and after
+        const clock_t start_time_Before = clock();
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<JarrowRudd>(bsmProcess, timeStepsBefore)));
+        Real DeltaJRBefore=europeanOption.delta();
+        Real GammaJRBefore=europeanOption.gamma();
+        Real NPVJRBefore=europeanOption.NPV();
+        std::cout << "Time spent After calculating:           " <<  float( clock () - start_time_Before) << std::endl;
+        std::cout << "NPV Before changes:                     "  << NPVJRBefore << std::endl;
+        std::cout << "Difference in NPV after and before:     "  << NPVJRBefore-NPVJRAfter << std::endl;
+        std::cout << "Delta with JR BT before changes:        "  << DeltaJRBefore << std::endl;
+        std::cout << "Gamma with JR BT before changes:        "  << GammaJRBefore << std::endl;
+        std::cout << "Difference in delta after and before:   "  << DeltaJRBefore-DeltaJR << std::endl;
+        std::cout << "Difference in gamma after and before:   "  << GammaJRBefore-GammaJR << std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
+
         
         
         //CoxRossRubinstein
         method= "CoxRossRubinstein";
-        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<CoxRossRubinstein>(bsmProcess, timeSteps)));
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<CoxRossRubinstein_2>(bsmProcess, timeStepsAfter)));
         Real DeltaCRR=europeanOption.delta();
         Real GammaCRR=europeanOption.gamma();
         std::cout << method << std::endl;
-        std::cout << "Delta with CRR BT:           " << DeltaCRR << std::endl;
-        std::cout << "Gamma with CRR BT:           " << GammaCRR << std::endl;
-        std::cout << "Difference in delta with BS: " << DeltaCRR-DeltaBS << std::endl;
-        std::cout << "Difference in gamma with BS: " << GammaCRR-GammaBS << std::endl;
+        std::cout <<"NPV:                          "  << europeanOption.NPV() << std::endl;
+        std::cout << "Delta with CRR BT:           "  << DeltaCRR << std::endl;
+        std::cout << "Gamma with CRR BT:           "  << GammaCRR << std::endl;
+        std::cout << "Difference in delta with BS: "  << DeltaCRR-DeltaBS << std::endl;
+        std::cout << "Difference in gamma with BS: "  << GammaCRR-GammaBS << std::endl;
         std::cout << std::endl;
-        
+        std::cout << std::endl;
+
         //Trigeorgis
         method= "Trigeorgis";
-        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<Trigeorgis>(bsmProcess, timeSteps)));
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<Trigeorgis_2>(bsmProcess, timeStepsAfter)));
         Real DeltaTr=europeanOption.delta();
         Real GammaTr=europeanOption.gamma();
         std::cout << method << std::endl;
+        std::cout << "NPV:                         "  << europeanOption.NPV() << std::endl;
         std::cout << "Delta with Tr BT:            "  << DeltaTr << std::endl;
         std::cout << "Gamma with Tr BT:            "  << GammaTr << std::endl;
-        std::cout << "Difference in delta with BS: " << DeltaTr-DeltaBS << std::endl;
-        std::cout << "Difference in gamma with BS: " << GammaTr-GammaBS << std::endl;
+        std::cout << "Difference in delta with BS: "  << DeltaTr-DeltaBS << std::endl;
+        std::cout << "Difference in gamma with BS: "  << GammaTr-GammaBS << std::endl;
         std::cout << std::endl;
-        
+        std::cout << std::endl;
+
         //Tian
         method= "Tian";
-        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<Tian>(bsmProcess, timeSteps)));
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<Tian_2>(bsmProcess, timeStepsAfter)));
         Real DeltaTi=europeanOption.delta();
         Real GammaTi=europeanOption.gamma();
         std::cout << method << std::endl;
+        std::cout << "NPV:                         "  << europeanOption.NPV() << std::endl;
         std::cout << "Delta with Ti BT:            "  << DeltaTi << std::endl;
         std::cout << "Gamma with Ti BT:            "  << GammaTi << std::endl;
-        std::cout << "Difference in delta with BS: " << DeltaTi-DeltaBS << std::endl;
-        std::cout << "Difference in gamma with BS: " << GammaTi-GammaBS << std::endl;
+        std::cout << "Difference in delta with BS: "  << DeltaTi-DeltaBS << std::endl;
+        std::cout << "Difference in gamma with BS: "  << GammaTi-GammaBS << std::endl;
         std::cout << std::endl;
-        
+        std::cout << std::endl;
+
         //LeisenReimer
         method= "LeisenReimer";
-        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<LeisenReimer>(bsmProcess, timeSteps)));
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<LeisenReimer_2>(bsmProcess, timeStepsAfter)));
         Real DeltaL=europeanOption.delta();
         Real GammaL=europeanOption.gamma();
         std::cout << method << std::endl;
+        std::cout << "NPV:                         "  << europeanOption.NPV() << std::endl;
         std::cout << "Delta with L BT:             "  << DeltaL << std::endl;
         std::cout << "Gamma with L BT:             "  << GammaL << std::endl;
-        std::cout << "Difference in delta with BS: " << DeltaL-DeltaBS << std::endl;
-        std::cout << "Difference in gamma with BS: " << GammaL-GammaBS << std::endl;
+        std::cout << "Difference in delta with BS: "  << DeltaL-DeltaBS << std::endl;
+        std::cout << "Difference in gamma with BS: "  << GammaL-GammaBS << std::endl;
         std::cout << std::endl;
-        
+        std::cout << std::endl;
+
         //Joshi4
         method= "Joshi4";
-        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<Joshi4>(bsmProcess, timeSteps)));
+        europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<Joshi4_2>(bsmProcess, timeStepsAfter)));
         Real DeltaJo=europeanOption.delta();
         Real GammaJo=europeanOption.gamma();
         std::cout << method << std::endl;
+        std::cout << "NPV:                         "  << europeanOption.NPV() << std::endl;
         std::cout << "Delta with Jo BT:            "  << DeltaJo << std::endl;
         std::cout << "Gamma with Jo BT:            "  << GammaJo << std::endl;
-        std::cout << "Difference in delta with BS: " << DeltaJo-DeltaBS << std::endl;
-        std::cout << "Difference in gamma with BS: " << GammaJo-GammaBS << std::endl;
+        std::cout << "Difference in delta with BS: "  << DeltaJo-DeltaBS << std::endl;
+        std::cout << "Difference in gamma with BS: "  << GammaJo-GammaBS << std::endl;
         std::cout << std::endl;
+        std::cout << std::endl;
+
+
         
         return 0;
         
@@ -177,5 +210,6 @@ int main() {
         return 1;
     }
 }
+
 
 
