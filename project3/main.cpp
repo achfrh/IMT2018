@@ -103,13 +103,14 @@ int main() {
         
         method= "JarrowRudd";
         std::cout << method << std::endl;
-
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         const clock_t start_time_After = clock();
         europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine_2<JarrowRudd_2>(bsmProcess, timeStepsAfter)));
         Real DeltaJR=europeanOption.delta();
         Real GammaJR=europeanOption.gamma();
         Real NPVJRAfter=europeanOption.NPV();
-        std::cout << "Time spent Before calculating:          " <<  float( clock () - start_time_After)/CLOCKS_PER_SEC  << std::endl;
+        std::cout << "Time spent calculating:          " <<  float( clock () - start_time_After)/CLOCKS_PER_SEC  << std::endl;
 
         std::cout << "NPV:                                    "  << NPVJRAfter << std::endl;
         std::cout << "Delta with JR BT:                       "  << DeltaJR << std::endl;
@@ -119,12 +120,14 @@ int main() {
         std::cout << std::endl;
         
         //The Before
+        std::cout << "Before the modifications" << std::endl;
+        
         europeanOption.setPricingEngine(boost::shared_ptr<PricingEngine>( new BinomialVanillaEngine<JarrowRudd>(bsmProcess, timeStepsBefore)));
         const clock_t start_time_Before = clock();
         Real DeltaJRBefore=europeanOption.delta();
         Real GammaJRBefore=europeanOption.gamma();
         Real NPVJRBefore=europeanOption.NPV();
-        std::cout << "Time spent After calculating:           " <<  float( clock () - start_time_Before)/CLOCKS_PER_SEC << std::endl;
+        std::cout << "Time spent calculating:           " <<  float( clock () - start_time_Before)/CLOCKS_PER_SEC << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVJRBefore << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVJRBefore-NPVJRAfter << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaJRBefore << std::endl;
@@ -144,6 +147,8 @@ int main() {
         Real GammaCRR=europeanOption.gamma();
         Real NPVCRRAfter=europeanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout <<"NPV:                                     "  << NPVCRRAfter << std::endl;
         std::cout << "Delta with CRR BT:                      "  << DeltaCRR << std::endl;
         std::cout << "Gamma with CRR BT:                      "  << GammaCRR << std::endl;
@@ -156,6 +161,7 @@ int main() {
         Real DeltaCRRBefore=europeanOption.delta();
         Real GammaCRRBefore=europeanOption.gamma();
         Real NPVCRRBefore=europeanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVCRRBefore << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVCRRBefore-NPVCRRAfter << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaCRRBefore << std::endl;
@@ -174,6 +180,8 @@ int main() {
         Real GammaTr=europeanOption.gamma();
         Real NPVTrBefore=europeanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVTrBefore << std::endl;
         std::cout << "Delta with Tr BT:                       "  << DeltaTr << std::endl;
         std::cout << "Gamma with Tr BT:                       "  << GammaTr << std::endl;
@@ -186,6 +194,8 @@ int main() {
         Real DeltaTrBefore=europeanOption.delta();
         Real GammaTrBefore=europeanOption.gamma();
         Real NPVTrAfter=europeanOption.NPV();
+
+        std::cout << "Before the modifications" << std::endl;       
         std::cout << "NPV Before changes:                     "  << NPVTrBefore << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVTrBefore-NPVTrAfter << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaTrBefore << std::endl;
@@ -204,6 +214,8 @@ int main() {
         Real GammaTi=europeanOption.gamma();
         Real NPVTiAfter=europeanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVTiAfter << std::endl;
         std::cout << "Delta with Ti BT:                       "  << DeltaTi << std::endl;
         std::cout << "Gamma with Ti BT:                       "  << GammaTi << std::endl;
@@ -216,6 +228,7 @@ int main() {
         Real DeltaTiBefore=europeanOption.delta();
         Real GammaTiBefore=europeanOption.gamma();
         Real NPVTiBefore=europeanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVTiBefore << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVTiBefore-NPVTiAfter << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaTiBefore << std::endl;
@@ -234,6 +247,8 @@ int main() {
         Real GammaL=europeanOption.gamma();
         Real NPVLAfter=europeanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVLAfter << std::endl;
         std::cout << "Delta with L BT:                        "  << DeltaL << std::endl;
         std::cout << "Gamma with L BT:                        "  << GammaL << std::endl;
@@ -246,6 +261,7 @@ int main() {
         Real DeltaLBefore=europeanOption.delta();
         Real GammaLBefore=europeanOption.gamma();
         Real NPVLBefore=europeanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVLBefore << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVLBefore-NPVLAfter << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaLBefore << std::endl;
@@ -264,6 +280,8 @@ int main() {
         Real GammaJo=europeanOption.gamma();
         Real NPVJoAfter=europeanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVJoAfter << std::endl;
         std::cout << "Delta with Jo BT:                       "  << DeltaJo << std::endl;
         std::cout << "Gamma with Jo BT:                       "  << GammaJo << std::endl;
@@ -275,6 +293,7 @@ int main() {
         Real DeltaJoBefore=europeanOption.delta();
         Real GammaJoBefore=europeanOption.gamma();
         Real NPVJoBefore=europeanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVJoBefore << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVJoBefore-NPVJoAfter << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaJoBefore << std::endl;
@@ -318,6 +337,8 @@ int main() {
         Real GammaJRa=americanOption.gamma();
         Real NPVJRAfter_a=americanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVJRAfter_a << std::endl;
         std::cout << "Delta with JR BT:                       "  << DeltaJRa << std::endl;
         std::cout << "Gamma with JR BT:                       "  << GammaJRa << std::endl;
@@ -329,6 +350,7 @@ int main() {
         Real DeltaJRBefore_a=americanOption.delta();
         Real GammaJRBefore_a=americanOption.gamma();
         Real NPVJRBefore_a=americanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVJRBefore_a << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVJRBefore_a-NPVJRAfter_a << std::endl;
         std::cout << "Delta with JR BT before changes:        "  << DeltaJRBefore_a << std::endl;
@@ -348,6 +370,8 @@ int main() {
         Real GammaCRRa=americanOption.gamma();
         Real NPVCRRAfter_a=americanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << americanOption.NPV() << std::endl;
         std::cout << "Delta with CRR BT:                      "  << DeltaCRRa << std::endl;
         std::cout << "Gamma with CRR BT:                      "  << GammaCRRa << std::endl;
@@ -359,6 +383,7 @@ int main() {
         Real DeltaCRRBefore_a=americanOption.delta();
         Real GammaCRRBefore_a=americanOption.gamma();
         Real NPVCRRBefore_a=americanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVCRRBefore_a << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVCRRBefore_a-NPVCRRAfter_a << std::endl;
         std::cout << "Delta with CRR BT before changes:       "  << DeltaCRRBefore_a << std::endl;
@@ -376,6 +401,8 @@ int main() {
         Real GammaTra=americanOption.gamma();
         Real NPVTrAfter_a=americanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVTrAfter_a << std::endl;
         std::cout << "Delta with Tr BT:                       "  << DeltaTra << std::endl;
         std::cout << "Gamma with Tr BT:                       "  << GammaTra << std::endl;
@@ -387,6 +414,7 @@ int main() {
         Real DeltaTrBefore_a=americanOption.delta();
         Real GammaTrBefore_a=americanOption.gamma();
         Real NPVTrBefore_a=americanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;        
         std::cout << "NPV Before changes:                     "  << NPVTrBefore_a << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVTrBefore_a-NPVTrAfter_a << std::endl;
         std::cout << "Delta with Tr BT before changes:        "  << DeltaTrBefore_a << std::endl;
@@ -406,6 +434,8 @@ int main() {
         Real GammaTia=americanOption.gamma();
         Real NPVTiAfter_a=americanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVTiAfter_a << std::endl;
         std::cout << "Delta with Ti BT:                       "  << DeltaTia << std::endl;
         std::cout << "Gamma with Ti BT:                       "  << GammaTia << std::endl;
@@ -418,6 +448,7 @@ int main() {
         Real DeltaTiBefore_a=americanOption.delta();
         Real GammaTiBefore_a=americanOption.gamma();
         Real NPVTiBefore_a=americanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;        
         std::cout << "NPV Before changes:                     "  << NPVTiBefore_a << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVTiBefore_a-NPVTiAfter_a << std::endl;
         std::cout << "Delta with Ti BT before changes:        "  << DeltaTiBefore_a << std::endl;
@@ -436,6 +467,8 @@ int main() {
         Real GammaLaa=americanOption.gamma();
         Real NPVLaAfter_a=americanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVLaAfter_a << std::endl;
         std::cout << "Delta with Li BT:                       "  << DeltaLaa << std::endl;
         std::cout << "Gamma with Li BT:                       "  << GammaLaa << std::endl;
@@ -448,6 +481,7 @@ int main() {
         Real DeltaLaBefore_a=americanOption.delta();
         Real GammaLaBefore_a=americanOption.gamma();
         Real NPVLaBefore_a=americanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVLaBefore_a << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVLaBefore_a-NPVLaAfter_a << std::endl;
         std::cout << "Delta with Li BT before changes:        "  << DeltaLaBefore_a << std::endl;
@@ -465,6 +499,8 @@ int main() {
         Real GammaJoa=americanOption.gamma();
         Real NPVJoAfter_a=americanOption.NPV();
         std::cout << method << std::endl;
+        std::cout << std::endl;
+        std::cout << "After the modifications" << std::endl;
         std::cout << "NPV:                                    "  << NPVJoAfter_a << std::endl;
         std::cout << "Delta with Jo BT:                       "  << DeltaJoa << std::endl;
         std::cout << "Gamma with Jo BT:                       "  << GammaJoa << std::endl;
@@ -478,6 +514,7 @@ int main() {
         Real DeltaJoBefore_a=americanOption.delta();
         Real GammaJoBefore_a=americanOption.gamma();
         Real NPVJoBefore_a=americanOption.NPV();
+        std::cout << "Before the modifications" << std::endl;
         std::cout << "NPV Before changes:                     "  << NPVJoBefore_a << std::endl;
         std::cout << "Difference in NPV after and before:     "  << NPVJoBefore_a-NPVLaAfter_a << std::endl;
         std::cout << "Delta with Jo BT before changes:        "  << DeltaJoBefore_a << std::endl;
